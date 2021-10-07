@@ -4,7 +4,7 @@
  */
 
 const fetch = require('node-fetch');
-const uuid = require('uuid');
+const { v4 } = require('uuid');
 
 /**
  * @class
@@ -16,7 +16,7 @@ const uuid = require('uuid');
  * @param {String} options.client_id        Provide Client ID (Optional)
  */
 class TelegrafGA4 {
-  constructor({ measurement_id, api_secret, user_id = undefined, client_id = uuid.v4() }) {
+  constructor({ measurement_id, api_secret, user_id = undefined, client_id = v4() }) {
     if (!measurement_id || !api_secret) {
       throw new SyntaxError('GA4 requires both measurement_id and api_secret');
     }
