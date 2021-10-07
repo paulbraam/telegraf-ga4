@@ -1,0 +1,7 @@
+{
+  "name": "Telegraf GA4",
+  "jest": {
+    "testEnvironment": "jest-environment-node",
+    "transform": {}
+  }
+}
