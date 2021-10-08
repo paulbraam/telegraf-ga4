@@ -3,7 +3,7 @@
  * @author Paul Braam <paulbraam7@gmail.com>
  */
 
-const fetch = require('node-fetch');
+const fetch = require('cross-fetch');
 const { v4 } = require('uuid');
 
 /**

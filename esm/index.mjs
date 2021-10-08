@@ -3,7 +3,7 @@
  * @author Paul Braam <paulbraam7@gmail.com>
  */
 
-import fetch from 'node-fetch';
+import fetch from 'cross-fetch';
 import { v4 } from 'uuid';
 
 /**
