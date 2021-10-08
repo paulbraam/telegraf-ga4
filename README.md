@@ -28,6 +28,7 @@ bot.use(ga4.middleware());
 // set custom user properties
 bot.use((ctx, next) => {
   const userPlan = db.getUserPlan(ctx.from.id);
+  // user properties: https://developers.google.com/analytics/devguides/collection/protocol/ga4/user-properties
   ctx.ga4.setUserProperties({
     plan: userPlan
   })
@@ -50,7 +51,7 @@ bot.command('event', (ctx) => {
 
 // send a single event using ctx
 bot.command('event', (ctx) => {
-  ctx.ga4.event('bot_start', {    // custom event
+  ctx.ga4.event('bot_start', {  // custom event
     chat_id: ctx.chat.id
   });
 });
@@ -69,6 +70,7 @@ bot.command('debug', async (ctx) => {
   const validationMessages = await ctx.ga4.event('login', {
     method: 'Telegram'
   }, true);
+  // events validation: https://developers.google.com/analytics/devguides/collection/protocol/ga4/validating-events
   console.log(validationMessages); // an empty array on success
 });
 
