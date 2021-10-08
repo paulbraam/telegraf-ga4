@@ -36,7 +36,8 @@ bot.use((ctx, next) => {
 
 // send a single event
 bot.command('event', (ctx) => {
-  ga4.event('purchase', {   // recommended events: https://developers.google.com/gtagjs/reference/ga4-events
+  // recommended events: https://developers.google.com/gtagjs/reference/ga4-events
+  ga4.event('purchase', {
     currency: 'USD',
     transaction_id: 'T_12345',
     value: '12.21',
