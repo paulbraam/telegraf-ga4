@@ -11,7 +11,7 @@ const { v4 } = require('uuid');
  * 
  * @param {Object} options                  Required credentials for GA4
  * @param {String} options.measurement_id   Admin > Data Streams > choose your stream > Measurement ID (Required)
- * @param {String} options.api_secret       Client ID provided by you or generated automatically (Required)
+ * @param {String} options.api_secret       Admin > Data Streams > choose your stream > Measurement Protocol > Create
  * @param {Number} options.user_id          Provide User ID (Optional)
  * @param {String} options.client_id        Provide Client ID (Optional)
  */
@@ -29,13 +29,13 @@ class TelegrafGA4 {
   /** 
    * @method middleware
    * Extends TelegrafContext, e.g.
-   * ctx.analytics.event('login', { 
+   * ctx.ga4.event('login', { 
    *    method: 'Telegram' 
    * })
    */
   middleware() {
     return (ctx, next) => {
-      ctx.analytics = this;
+      ctx.ga4 = this;
       if (!this.user_id)
         this.user_id = ctx.from.id;
       // set the language automatically
