@@ -35,6 +35,14 @@ bot.use((ctx, next) => {
   return next();
 });
 
+// send a view to track user activity
+// view title is picked up automatically from message text or callback data
+bot.use(ga4.view());
+// custom view title
+bot.command('greet', ga4.view('Greeting'), (ctx) => {
+  ctx.reply('Hi!');
+});
+
 // send a single event
 bot.command('event', (ctx) => {
   // recommended events: https://developers.google.com/gtagjs/reference/ga4-events

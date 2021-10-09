@@ -45,6 +45,34 @@ class TelegrafGA4 {
   }
 
   /** 
+   * @method _sendView
+   * @param {Class} ctx             Telegraf Context
+   * @param {String} title          Custom title
+   * @param {String} payload.id     Content ID, e.g. bot_start
+   * @param {String} payload.type   Content Type, e.g. callback_query
+   */
+   _sendView(ctx, title) {
+    const text = ctx.message && ctx.message.text;
+    const callbackData = ctx.update.callback_query && ctx.update.callback_query.data;
+    const data = text || callbackData;
+    if (!(title && typeof title === 'string' || data)) return;
+    const page_title = title || data;
+    return this.event('page_view', { page_title });
+  }
+
+  /** 
+   * @method view           Middleware
+   * @param {String} title  Custom title
+   * Send view events to track user actions
+   */
+  view(title = null) {
+    return (ctx, next) => {
+      this._sendView(ctx, title);
+      return next();
+    }
+  }
+
+  /** 
    * @method _handleUserProps
    * @param {Object} user_properties
    * Makes sent user properties validation-ready
