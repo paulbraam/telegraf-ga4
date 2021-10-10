@@ -45,13 +45,29 @@ class TelegrafGA4 {
   }
 
   /** 
-   * @method _sendView
-   * @param {Class} ctx             Telegraf Context
-   * @param {String} title          Custom title
-   * @param {String} payload.id     Content ID, e.g. bot_start
-   * @param {String} payload.type   Content Type, e.g. callback_query
+   * @method _controlSession
+   * Starts and ends the session
    */
-   _sendView(ctx, title) {
+  _controlSession() {
+    const sessionDuration = 30 * 60 * 1000;
+    if (!this.session_start) {
+      this.session_start = true;
+      this.event('page_view', { sessionControl: 'start' });
+    }
+    clearTimeout(this.timerId);
+    let timerId = setTimeout(() => {
+      this.session_start = false;
+      this.event('page_view', { sessionControl: 'end' });
+    }, sessionDuration);
+    this.timerId = timerId;
+  }
+
+  /** 
+   * @method _sendView
+   * @param {Class} ctx       Telegraf Context
+   * @param {String} title    Custom title
+   */
+  _sendView(ctx, title) {
     const text = ctx.message && ctx.message.text;
     const callbackData = ctx.update.callback_query && ctx.update.callback_query.data;
     const data = text || callbackData;
@@ -61,12 +77,12 @@ class TelegrafGA4 {
   }
 
   /** 
-   * @method view           Middleware
-   * @param {String} title  Custom title
-   * Send view events to track user actions
+   * @method view             Middleware
+   * @param {String} title    Custom title
    */
   view(title = null) {
     return (ctx, next) => {
+      this._controlSession();
       this._sendView(ctx, title);
       return next();
     }
