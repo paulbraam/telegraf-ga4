@@ -1,10 +1,11 @@
-import TelegrafGA4 from './esm/index.mjs';
+import TelegrafGA4 from './src/esm/index.mjs';
 import dotenv from 'dotenv';
 dotenv.config();
 
 const config = {
   measurement_id: process.env.GA_MEASUREMENT_ID,
-  api_secret: process.env.GA_API_SECRET
+  api_secret: process.env.GA_API_SECRET,
+  client_id: process.env.GA_CLIENT_ID,
 }
 
 const analytics = new TelegrafGA4(config);

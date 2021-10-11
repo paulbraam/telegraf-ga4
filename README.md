@@ -21,6 +21,8 @@ const ga4 = new TelegrafGA4({
   measurement_id: process.env.GA4_MEASUREMENT_ID,
   // Admin > Data Streams > choose your stream > Measurement Protocol > Create (Required)
   api_secret: process.env.GA4_API_SECRET
+  // https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid
+  client_id: process.env.GA4_CLIENT_ID
 });
 
 bot.use(ga4.middleware());
@@ -37,9 +39,9 @@ bot.use((ctx, next) => {
 
 // send a view to track user activity
 // view title is picked up automatically from message text or callback data
-bot.use(ga4.view());
+bot.use(ga4.view()); // allowed, but not recommended
 // custom view title
-bot.command('greet', ga4.view('Greeting'), (ctx) => {
+bot.command('greet', ga4.view('Greeting'), (ctx) => { // recommended
   ctx.reply('Hi!');
 });
 

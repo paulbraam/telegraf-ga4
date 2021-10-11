@@ -4,7 +4,6 @@
  */
 
 import fetch from 'cross-fetch';
-import { v4 } from 'uuid';
 
 /**
  * @class
@@ -12,18 +11,16 @@ import { v4 } from 'uuid';
  * @param {Object} options                  Required credentials for GA4
  * @param {String} options.measurement_id   Admin > Data Streams > choose your stream > Measurement ID (Required)
  * @param {String} options.api_secret       Admin > Data Streams > choose your stream > Measurement Protocol > Create
- * @param {Number} options.user_id          Provide User ID (Optional)
- * @param {String} options.client_id        Provide Client ID (Optional)
+ * @param {String} options.client_id        https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid
  */
 class TelegrafGA4 {
-  constructor({ measurement_id, api_secret, user_id = undefined, client_id = v4() }) {
-    if (!measurement_id || !api_secret) {
-      throw new SyntaxError('GA4 requires both measurement_id and api_secret');
+  constructor({ measurement_id, api_secret, client_id }) {
+    if (!measurement_id || !api_secret || !client_id) {
+      throw new SyntaxError('GA4 requires measurement_id, api_secret and client_id');
     }
     this.measurement_id = measurement_id;
     this.api_secret = api_secret;
     this.client_id = client_id;
-    this.user_id = user_id;
   }
 
   /** 
@@ -42,24 +39,6 @@ class TelegrafGA4 {
       this.setUserProperties({ language: ctx.from.language_code });
       return next();
     }
-  }
-
-  /** 
-   * @method _controlSession
-   * Starts and ends the session
-   */
-  _controlSession() {
-    const sessionDuration = 30 * 60 * 1000;
-    if (!this.session_start) {
-      this.session_start = true;
-      this.event('page_view', { sessionControl: 'start' });
-    }
-    clearTimeout(this.timerId);
-    let timerId = setTimeout(() => {
-      this.session_start = false;
-      this.event('page_view', { sessionControl: 'end' });
-    }, sessionDuration);
-    this.timerId = timerId;
   }
 
   /** 
@@ -82,7 +61,6 @@ class TelegrafGA4 {
    */
   view(title = null) {
     return (ctx, next) => {
-      this._controlSession();
       this._sendView(ctx, title);
       return next();
     }
