@@ -163,9 +163,9 @@ class TelegrafGA4 {
    */
   event(name, params, debug = false) {
     const event = { name };
-    if (params) {
-      event.params = params;
-    }
+    event.params = Object.assign({
+      engagement_time_msec: 500
+    }, params);
     const queryParams = this._createQueryParams([event]);
     return this.query(queryParams, debug);
   }
